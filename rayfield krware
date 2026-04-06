@@ -1,0 +1,235 @@
+--https://docs.sirius.menu/rayfield
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+local Window = Rayfield:CreateWindow({
+   Name = "KRWare",
+   Icon = 0, -- Use 0 for no icon
+   LoadingTitle = "KRWare Script Hub",
+   LoadingSubtitle = "by Krware ",
+   ShowText = "Rayfield", -- for mobile users to unhide rayfield, change if you'd like
+   Theme = "Amethyst",
+
+   ToggleUIKeybind = "K",
+
+   DisableRayfieldPrompts = false,
+   DisableBuildWarnings = false,
+
+   ConfigurationSaving = {
+      Enabled = true,
+      FolderName = nil,
+      FileName = "KRWare"
+   },
+
+   Discord = {
+      Enabled = false,
+      Invite = "noinvitelink",
+      RememberJoins = true
+   },
+
+   KeySystem = false,
+   KeySettings = {
+      Title = "Example Key",
+      Subtitle = "Key System",
+      Note = "This is to showcase the Rayfield Key System! Type 1 to continue",
+      FileName = "Key",
+      SaveKey = false,
+      GrabKeyFromSite = false,
+      Key = {"1"}
+   }
+})
+
+local Tab = Window:CreateTab("Player Mods", 4483362458) -- Title, Image
+
+ tabHitbox = Window:CreateTab("Hitbox Expander ") -- Title, Image
+
+
+Rayfield:Notify({
+   Title = "Notification",
+   Content = "Make sure to join the discord server for updates about the script <3",
+   Duration = 6.5,
+   Image = "home",
+})
+
+local Button = Tab:CreateButton({
+   Name = "Infinite Jump",
+   Callback = function()
+
+--[[
+	WARNING: Heads up! This script has not been verified by ScriptBlox. Use at your own risk!
+]]
+local UIS = game:GetService("UserInputService")
+local player = game.Players.LocalPlayer
+
+local function onJumpRequest()
+    local character = player.Character
+    if not character then return end
+
+    local humanoid = character:FindFirstChildOfClass("Humanoid")
+    if not humanoid then return end
+
+    humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+end
+
+UIS.JumpRequest:Connect(onJumpRequest)
+
+      print("button clicked")
+   end,
+})
+
+local Toggle = Tab:CreateToggle({
+   Name = "ESP Charms",
+   CurrentValue = false,
+   Flag = "Toggle1",
+   Callback = function(Value)
+
+-- Simple Fucking Chams ESP To Skid
+
+local plrs = game:GetService("Players")
+local rs = game:GetService("RunService")
+local core = game:GetService("CoreGui")
+
+local lp = plrs.LocalPlayer
+local target_container = (gethui and gethui()) or core
+
+local settings = {
+    color = Color3.fromRGB(255, 50, 50),
+    outline = Color3.fromRGB(0, 0, 0),
+    team_check = false,
+    enabled = true
+}
+
+local function handle_plr(v)
+    local function inject(char)
+        if not char then return end
+        
+        local tag = "hx_" .. v.UserId
+        local h = target_container:FindFirstChild(tag) or Instance.new("Highlight")
+        
+        h.Name = tag
+        h.Adornee = char
+        h.FillColor = settings.color
+        h.OutlineColor = settings.outline
+        h.FillTransparency = 0.45
+        h.OutlineTransparency = 0
+        h.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+        h.Parent = target_container
+    end
+
+    v.CharacterAdded:Connect(inject)
+    if v.Character then inject(v.Character) end
+end
+
+for _, v in next, plrs:GetPlayers() do
+    if v ~= lp then
+        handle_plr(v)
+    end
+end
+
+plrs.PlayerAdded:Connect(handle_plr)
+
+rs.RenderStepped:Connect(function()
+    if not settings.enabled then return end
+    
+    for _, v in next, plrs:GetPlayers() do
+        local tag = "hx_" .. v.UserId
+        local obj = target_container:FindFirstChild(tag)
+        
+        if obj then
+            if v == lp or not v.Character or (settings.team_check and v.Team == lp.Team) then
+                obj.Enabled = false
+            else
+                obj.Enabled = true
+            end
+        end
+    end
+end)
+
+plrs.PlayerRemoving:Connect(function(v)
+    local tag = "hx_" .. v.UserId
+    local obj = target_container:FindFirstChild(tag)
+    if obj then obj:Destroy() end
+end)
+
+      print(Value)
+   end,
+})
+
+
+local Slider = Tab:CreateSlider({
+   Name = "Slider Example",
+   Range = {0, 100},
+   Increment = 10,
+   Suffix = "Speed",
+   CurrentValue = 10,
+   Flag = "Slider1",
+   Callback = function(Value)
+
+--[[
+	WARNING: Heads up! This script has not been verified by ScriptBlox. Use at your own risk!
+]]
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
+
+local player = Players.LocalPlayer
+local char = player.Character or player.CharacterAdded:Wait()
+local hrp = char:WaitForChild("HumanoidRootPart")
+local humanoid = char:WaitForChild("Humanoid")
+
+-- speed
+local walkSpeed = 16      
+local runSpeed = 30
+local currentSpeed = walkSpeed
+
+
+local running = false
+
+UserInputService.InputBegan:Connect(function(input, gpe)
+    if gpe then return end
+    if input.KeyCode == Enum.KeyCode.LeftShift then
+        running = true
+        currentSpeed = runSpeed
+    end
+end)
+
+UserInputService.InputEnded:Connect(function(input, gpe)
+    if input.KeyCode == Enum.KeyCode.LeftShift then
+        running = false
+        currentSpeed = walkSpeed
+    end
+end)
+
+
+RunService.RenderStepped:Connect(function(dt)
+    local moveDir = humanoid.MoveDirection
+    if moveDir.Magnitude > 0 then
+        
+        hrp.CFrame = hrp.CFrame + (moveDir * currentSpeed * dt)
+    end
+end)
+
+
+      print("Current Banana:", Value)
+   end,
+})
+
+
+
+
+local Button = Tab:CreateButton({
+   Name = "FLING ALL",
+   Callback = function()
+
+--[[
+	WARNING: Heads up! This script has not been verified by ScriptBlox. Use at your own risk!
+]]
+--Credits to mastermz
+
+
+loadstring(game:HttpGet("https://pastebin.com/raw/zqyDSUWX"))()
+
+
+
+
+   end,
+})
